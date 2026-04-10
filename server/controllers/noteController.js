@@ -1,7 +1,7 @@
 const Note = require('../models/Note');
 
 // Create a new note
-const createNote = (req, res) => {
+const createNote = async (req, res) => {
   try {
     const { title, description, tag } = req.body;
 
@@ -9,7 +9,7 @@ const createNote = (req, res) => {
       return res.status(400).json({ message: 'Title is required' });
     }
 
-    const note = Note.create({ title, description, tag });
+    const note = await Note.create({ title, description, tag });
     return res.status(201).json(note);
   } catch (error) {
     console.error('Create note error:', error.message);
@@ -18,14 +18,14 @@ const createNote = (req, res) => {
 };
 
 // Get notes, optionally filtered by tag
-const getNotes = (req, res) => {
+const getNotes = async (req, res) => {
   try {
-    const options = { order: [['createdAt', 'DESC']] };
+    const filter = {};
     if (req.query.tag) {
-      options.where = { tag: req.query.tag };
+      filter.tag = req.query.tag;
     }
 
-    const notes = Note.findAll(options);
+    const notes = await Note.findAll({ where: filter, order: [['createdAt', 'DESC']] });
     return res.json(notes);
   } catch (error) {
     console.error('Get notes error:', error.message);
@@ -34,15 +34,15 @@ const getNotes = (req, res) => {
 };
 
 // Delete a note by ID
-const deleteNote = (req, res) => {
+const deleteNote = async (req, res) => {
   try {
-    const note = Note.findByPk(req.params.id);
+    const note = await Note.findByPk(req.params.id);
 
     if (!note) {
       return res.status(404).json({ message: 'Note not found' });
     }
 
-    note.destroy();
+    await note.destroy();
     return res.json({ message: 'Note deleted successfully' });
   } catch (error) {
     console.error('Delete note error:', error.message);

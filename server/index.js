@@ -18,27 +18,18 @@ app.use(cors());
 // Serve static files from the React app build directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Connect to SQLite
-connectDB();
+// Connect to SQLite and start server
+const startServer = async () => {
+  try {
+    await connectDB();
+    
+    app.listen(PORT, () => {
+      console.log(`Server listening on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+};
 
-// Health check route
-app.get('/', (req, res) => {
-  res.send({ message: 'Research Notes Manager API is running' });
-});
-
-// Note routes
-app.use('/api/notes', noteRoutes);
-
-// Catch all handler: send back React's index.html file for client-side routing
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// Global error handler for unknown routes
-app.use((req, res) => {
-  res.status(404).json({ message: 'Route not found' });
-});
-
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
+startServer();

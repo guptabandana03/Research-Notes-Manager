@@ -152,9 +152,9 @@ Example:
 
 ## Database
 
-JSON file-based storage is automatically created at `server/data/notes.json` on first run. The JSON file stores notes as an array of objects with the following structure:
+SQLite database is automatically created at `server/data/notes.db` on first run. The database includes:
 
-- **Note Object**: id, title, description, tag, createdAt, updatedAt
+- **Notes Table**: id, title, description, tag, createdAt, updatedAt
 
 ## Notes
 

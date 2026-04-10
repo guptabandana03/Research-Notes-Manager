@@ -1,42 +1,28 @@
-const fs = require('fs');
+const { Sequelize } = require('sequelize');
 const path = require('path');
-
-const DB_FILE = path.join(__dirname, '../data/notes.json');
+const fs = require('fs');
 
 // Ensure data directory exists
-const dataDir = path.join(__dirname, '../data');
+const dataDir = path.join(__dirname, '..', 'data');
 if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir, { recursive: true });
 }
 
-// Simple JSON database functions
-const readDB = () => {
+const sequelize = new Sequelize({
+  dialect: 'sqlite',
+  storage: path.join(dataDir, 'notes.db'),
+  logging: false, // Set to console.log to see SQL queries
+});
+
+const connectDB = async () => {
   try {
-    if (!fs.existsSync(DB_FILE)) {
-      return [];
-    }
-    const data = fs.readFileSync(DB_FILE, 'utf8');
-    return JSON.parse(data);
+    await sequelize.authenticate();
+    console.log('SQLite database connected successfully');
+    await sequelize.sync();
+    console.log('Database synchronized');
   } catch (error) {
-    console.error('Error reading database:', error);
-    return [];
+    console.error('Unable to connect to the database:', error);
   }
 };
 
-const writeDB = (data) => {
-  try {
-    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
-  } catch (error) {
-    console.error('Error writing database:', error);
-  }
-};
-
-const connectDB = () => {
-  // Ensure database file exists
-  if (!fs.existsSync(DB_FILE)) {
-    writeDB([]);
-  }
-  console.log('JSON database initialized');
-};
-
-module.exports = { readDB, writeDB, connectDB };
+module.exports = { sequelize, connectDB };
