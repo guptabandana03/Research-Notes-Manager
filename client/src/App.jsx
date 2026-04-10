@@ -4,7 +4,8 @@ import NoteCard from './components/NoteCard';
 import FilterBar from './components/FilterBar';
 import { fetchNotes, createNote, deleteNote } from './api/notesApi';
 
-const API_BASE = 'http://localhost:5000/api/notes';
+// Use relative API URL for production (same origin), localhost for development
+const API_BASE = import.meta.env.DEV ? 'http://localhost:5000/api/notes' : '/api/notes';
 
 function App() {
   const [notes, setNotes] = useState([]);

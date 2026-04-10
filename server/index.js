@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
 const { connectDB } = require('./config/db');
 const noteRoutes = require('./routes/noteRoutes');
 
@@ -14,6 +15,9 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cors());
 
+// Serve static files from the React app build directory
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Connect to SQLite
 connectDB();
 
@@ -24,6 +28,11 @@ app.get('/', (req, res) => {
 
 // Note routes
 app.use('/api/notes', noteRoutes);
+
+// Catch all handler: send back React's index.html file for client-side routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 // Global error handler for unknown routes
 app.use((req, res) => {
