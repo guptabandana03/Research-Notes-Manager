@@ -129,22 +129,24 @@ Example:
 - ✅ Clean, professional UI with Tailwind-inspired styling
 - ✅ Fully responsive design
 
-## Running the App
+## Deployment on Render
 
-### Start Backend (Terminal 1):
-```powershell
-cd c:\Users\bimal\Desktop\RPE\server
-node index.js
-```
+### Backend (Web Service)
+- **Root Directory**: `server`
+- **Build Command**: `npm install`
+- **Start Command**: `node index.js`
 
-### Start Frontend (Terminal 2):
-```powershell
-cd c:\Users\bimal\Desktop\RPE\client
-npm run dev
-```
+### Frontend (Static Site)
+- **Root Directory**: `client`
+- **Build Command**: `npm install && npm run build`
+- **Publish Directory**: `dist`
 
-### Access the App:
-Open your browser and navigate to **`http://localhost:5173`**
+### Environment Variables
+**Backend:**
+- `PORT`: `10000` (auto-assigned by Render)
+
+**Frontend:**
+- `VITE_API_BASE_URL`: `https://your-backend-name.onrender.com/api/notes`
 
 ## Database
 
