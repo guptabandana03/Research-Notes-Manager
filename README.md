@@ -129,24 +129,26 @@ Example:
 - ✅ Clean, professional UI with Tailwind-inspired styling
 - ✅ Fully responsive design
 
-## Deployment on Render
+## Deployment on Render (Unified)
 
-### Backend (Web Service)
-- **Root Directory**: `server`
-- **Build Command**: `npm install`
-- **Start Command**: `node index.js`
-
-### Frontend (Static Site)
-- **Root Directory**: `client`
-- **Build Command**: `npm install && npm run build`
-- **Publish Directory**: `dist`
+### Single Web Service Deployment
+- **Root Directory**: (leave blank)
+- **Build Command**: `npm run build`
+- **Start Command**: `npm start`
 
 ### Environment Variables
-**Backend:**
 - `PORT`: `10000` (auto-assigned by Render)
 
-**Frontend:**
-- `VITE_API_BASE_URL`: `https://your-backend-name.onrender.com/api/notes`
+### What happens:
+1. Build command runs `npm run build` which:
+   - Installs client dependencies
+   - Builds the React app
+   - Copies built files to `server/public/`
+2. Start command runs the backend server which serves both API and frontend
+
+### Access the App:
+- **URL**: `https://your-service-name.onrender.com`
+- Frontend and API are served from the same domain
 
 ## Database
 
